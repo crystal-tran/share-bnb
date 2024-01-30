@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
+
 class User(db.Model):
     """User of Share BnB"""
 
@@ -68,6 +69,21 @@ class Listing(db.Model):
         nullable=False
     )
 
+    city = db.Column(
+        db.String(50),
+        nullable=False
+    )
+
+    state = db.Column(
+        db.String(2),
+        nullable=False
+    )
+
+    zipcode = db.Column(
+        db.String(10),
+        nullable=False
+    )
+
     price = db.Column(
         db.Numeric(10, 2),
         nullable=False
@@ -79,8 +95,19 @@ class Listing(db.Model):
         nullable=False
     )
 
+    renter_username = db.Column(
+        db.String(30),
+        db.ForeignKey('users.username'),
+        nullable=False,
+        default="",
+    )
+
+    # relationship between User and Listing
+    user = db.relationship('User', backref='listings')
+
+
 class Photo(db.Model):
-    """Photos for listings"""
+    """Photos for a listing"""
 
     __tablename__ = 'photos'
 
@@ -100,3 +127,24 @@ class Photo(db.Model):
         db.Text,
         nullable=False
     )
+
+    # relationship between Photo and Listing
+    listings = db.relationship('Listing', backref='photos')
+
+
+class Likes(db.Model):
+    """A user can like a listing."""
+
+    username = db.Column(
+        db.String(30),
+        db.ForeignKey('users.username'),
+        primary_key=True,
+    )
+
+    listing_id = db.Column(
+        db.Integer,
+        db.ForeignKey('listings.id'),
+        primary_key=True
+    )
+
+    # TODO: Class Message
