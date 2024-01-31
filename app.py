@@ -13,7 +13,6 @@ from s3_config import upload_file, create_presigned_url, allowed_file
 import uuid
 
 
-
 app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
@@ -27,7 +26,6 @@ toolbar = DebugToolbarExtension(app)
 CURR_USER_KEY = "curr_user"
 
 connect_db(app)
-
 
 
 ####################### TESTING ###########################
@@ -47,7 +45,7 @@ connect_db(app)
 #             print("***url", url )
 #     return render_template("upload.html")
 
-################################# Authorization
+# Authorization
 @app.before_request
 def add_user_to_g():
     """If we're logged in, add curr user to Flask global."""
@@ -58,23 +56,26 @@ def add_user_to_g():
         g.user = User.query.get(session[CURR_USER_KEY])
         print("####g.user", g.user)
 
-
     else:
         g.user = None
+
 
 @app.before_request
 def add_csrf_to_g():
     """Add a cssrf form to Flask global."""
     g.csrf_form = CSRFProtectForm()
 
+
 def do_login(user):
     """ Log in user."""
     session[CURR_USER_KEY] = user.id
+
 
 def do_logout():
     """Log out user."""
     if CURR_USER_KEY in session:
         del session[CURR_USER_KEY]
+
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -115,6 +116,7 @@ def register():
     else:
         return render_template('users/register.html', form=form)
 
+
 @app.route('/login', methods=["GET", "POST"])
 def login():
     """Handle user login. Redirect to home upon success"""
@@ -135,28 +137,59 @@ def login():
 
     return render_template('users/login.html', form=form)
 
+
 @app.post('/logout')
 def logout():
     """Hanlde logout of user. Redirect to hompage"""
 
     form = g.csrf_form
+    print("1) g user:", g.user)
 
     if not form.validate_on_submit() or not g.user:
         flash("Unauthorized", "danger")
+        print("2) g user:", g.user)
         return redirect("/")
+
     do_logout()
+    print("3) g user:", g.user)
 
     flash("You have successfully logged out", "success")
     return redirect("/")
 
 
+# Homepage
 
-
-
-
-################################# Homepage
 @app.get("/")
 def homepage():
     """Show homepage."""
 
     return render_template("homepage.html")
+
+# Listings
+
+
+@app.get("/listings")
+def list_listings():
+    """Show page with listings."""
+
+    search = request.args.get('search-keyword')
+
+    if not search:
+        listings = Listing.query.all()
+    else:
+        listings = Listing.query.filter(
+            Listing.title.like(f"%{search}%")).all()
+
+    return render_template("listings/listings.html", listings=listings)
+
+###################################### User
+
+@app.route("/users/<int:user_id>/")
+def add_listings():
+    """Show form to add a listing and handles form submission."""
+
+    if not g.user:
+        flash("Unauthorized", "danger")
+        return redirect("/")
+
+    form = request.forms

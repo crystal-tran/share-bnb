@@ -41,6 +41,7 @@
 
       {% if g.user %}
       <form class="form-inline my-2 my-lg-0" method="POST" action="/logout">
+        {{ g.csrf_form.hidden_tag() }}
         <button class="btn-sm btn btn-outline-light">Log Out</button>
       </form>
       {% endif %}
