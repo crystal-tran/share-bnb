@@ -16,7 +16,7 @@ class User(db.Model):
         db.Integer,
         primary_key=True,
     )
-# TODO: uncomment this later
+
     username = db.Column(
         db.String(30),
         nullable=False,
@@ -68,6 +68,22 @@ class User(db.Model):
 
         db.session.add(user)
         return user
+
+    @classmethod
+    def authenticate(cls, username, password):
+        """Find a user with provided username and password
+
+        Returns user if user is found, otherwise returns False
+        """
+
+        user = cls.query.filter_by(username=username).one_or_none()
+
+        if user:
+            auth_user= bcrypt.check_password_hash(user.password, password)
+            if auth_user:
+                return user
+
+        return False
 
 
 class Listing(db.Model):

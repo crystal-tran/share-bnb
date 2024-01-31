@@ -6,7 +6,7 @@ from flask import Flask, render_template, request, flash, g
 from flask import redirect, session, g, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
-from forms import TestingUploadForm, CSRFProtectForm, RegisterForm
+from forms import TestingUploadForm, CSRFProtectForm, RegisterForm, LoginForm
 from werkzeug.utils import secure_filename
 from models import db, connect_db, User, Like, Listing, Photo
 from s3_config import upload_file, create_presigned_url, allowed_file
@@ -114,6 +114,45 @@ def register():
 
     else:
         return render_template('users/register.html', form=form)
+
+@app.route('/login', methods=["GET", "POST"])
+def login():
+    """Handle user login. Redirect to home upon success"""
+
+    form = LoginForm()
+
+    if form.validate_on_submit():
+        user = User.authenticate(
+            form.username.data,
+            form.password.data
+        )
+        if user:
+            do_login(user)
+            flash(f"Welcome back, {user.username}", "success")
+            return redirect("/")
+
+        flash("Invalid username/password", "danger")
+
+    return render_template('users/login.html', form=form)
+
+@app.post('/logout')
+def logout():
+    """Hanlde logout of user. Redirect to hompage"""
+
+    form = g.csrf_form
+
+    if not form.validate_on_submit() or not g.user:
+        flash("Unauthorized", "danger")
+        return redirect("/")
+    do_logout()
+
+    flash("You have successfully logged out", "success")
+    return redirect("/")
+
+
+
+
+
 
 ################################# Homepage
 @app.get("/")
