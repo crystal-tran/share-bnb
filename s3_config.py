@@ -49,6 +49,7 @@ def upload_file(file_name, bucket=SHAREBNB_BUCKET, object_name=None):
     print("response from aws:", response_from_aws)
     return True
 
+upload_file('default-pic.png')
 
 def create_presigned_url(object_name, bucket=SHAREBNB_BUCKET, expiration=3600):
     """Generate a presigned URL to share an S3 object
@@ -74,6 +75,5 @@ def create_presigned_url(object_name, bucket=SHAREBNB_BUCKET, expiration=3600):
     return response
 
 
-pre_signed_url = create_presigned_url('https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Casa_Assan_1.jpg/800px-Casa_Assan_1.jpg')
-
-upload_file(create_presigned_url)
+pre_signed_url = create_presigned_url('default-pic.png')
+# upload_file(pre_signed_url)
