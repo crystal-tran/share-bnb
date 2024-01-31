@@ -40,6 +40,7 @@ def upload_file(file_obj, object_name, bucket=SHAREBNB_BUCKET, ):
         return False
     return True
 
+upload_file('default-pic.png')
 
 
 def create_presigned_url(object_name, expiration=None, bucket_name=SHAREBNB_BUCKET):
