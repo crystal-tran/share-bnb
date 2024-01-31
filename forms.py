@@ -1,9 +1,8 @@
 """Forms for Flask Cafe."""
 
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, TextAreaField, DecimalField
-from wtforms import SelectField
-from wtforms.validators import InputRequired, Email, Length, URL, Optional
+from wtforms import StringField, PasswordField, TextAreaField, DecimalField, FileField
+from wtforms.validators import InputRequired, Email, Length
 
 
 class RegisterForm(FlaskForm):
@@ -81,3 +80,13 @@ class AddListingForm(FlaskForm):
         validators=[InputRequired()],
     )
 
+
+
+class TestingUploadForm(FlaskForm):
+    photo = FileField(
+        'Photo',
+        validators=[InputRequired()]
+    )
+
+class CSRFProtectForm(FlaskForm):
+    """Form just for CSRF Protection."""

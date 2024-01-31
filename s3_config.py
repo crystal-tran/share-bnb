@@ -4,14 +4,13 @@ from dotenv import load_dotenv
 from botocore.exceptions import ClientError
 import logging
 
-
-
 load_dotenv()
 
 access_key_id = os.environ['ACCESS_KEY_ID']
 secret_access_key = os.environ['SECRET_ACCESS_KEY']
 region = os.environ['REGION']
 SHAREBNB_BUCKET = os.environ['BUCKET_NAME']
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
 
 s3 = boto3.client(
@@ -21,13 +20,8 @@ s3 = boto3.client(
     aws_secret_access_key=secret_access_key
 )
 
-# response = s3.list_buckets()
 
-# print('Existing buckets:')
-# for bucket in response['Buckets']:
-#     print(f'  {bucket["Name"]}')
-
-def upload_file(file_name, bucket=SHAREBNB_BUCKET, object_name=None):
+def upload_file(file_obj, object_name, bucket=SHAREBNB_BUCKET, ):
     """Upload a file to an S3 bucket
 
     :param file_name: File to upload
@@ -37,20 +31,18 @@ def upload_file(file_name, bucket=SHAREBNB_BUCKET, object_name=None):
     """
 
     # If S3 object_name was not specified, use file_name
-    if object_name is None:
-        object_name = os.path.basename(file_name)
 
     # Upload the file
     try:
-        response_from_aws = s3.upload_file(file_name, bucket, object_name)
+        s3.upload_fileobj(file_obj, bucket, object_name)
     except ClientError as e:
         logging.error(e)
         return False
-    print("response from aws:", response_from_aws)
     return True
 
 
-def create_presigned_url(object_name, bucket=SHAREBNB_BUCKET, expiration=3600):
+
+def create_presigned_url(object_name, expiration=None, bucket_name=SHAREBNB_BUCKET):
     """Generate a presigned URL to share an S3 object
 
     :param bucket_name: string
@@ -60,12 +52,16 @@ def create_presigned_url(object_name, bucket=SHAREBNB_BUCKET, expiration=3600):
     """
 
     # Generate a presigned URL for the S3 object
+
     try:
-        response = s3.generate_presigned_url('get_object',
-                                                    Params={'Bucket': bucket,
-                                                            'Key': object_name},
-                                                    ExpiresIn=expiration)
-        print("response from presigned url:", response)
+        response = s3.generate_presigned_url(
+            'get_object',
+            Params={
+                    'Bucket': bucket_name,
+                    'Key': object_name,
+                    },
+            ExpiresIn=expiration
+            )
     except ClientError as e:
         logging.error(e)
         return None
@@ -73,7 +69,11 @@ def create_presigned_url(object_name, bucket=SHAREBNB_BUCKET, expiration=3600):
     # The response contains the presigned URL
     return response
 
+# pre_signed_url = create_presigned_url('https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Casa_Assan_1.jpg/800px-Casa_Assan_1.jpg')
+# print("pre_signed_url:", pre_signed_url)
+# upload_file(create_presigned_url)
 
-pre_signed_url = create_presigned_url('https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Casa_Assan_1.jpg/800px-Casa_Assan_1.jpg')
-print("pre_signed_url:", pre_signed_url)
-upload_file(create_presigned_url)
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
