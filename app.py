@@ -20,7 +20,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
     "DATABASE_URL", 'postgresql:///sharebnb')
 app.config['SECRET_KEY'] = os.environ.get("FLASK_SECRET_KEY", "shhhh")
 app.config['SQLALCHEMY_ECHO'] = True
-# app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = True
+app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = True
 
 toolbar = DebugToolbarExtension(app)
 
@@ -51,7 +51,7 @@ connect_db(app)
 @app.before_request
 def add_user_to_g():
     """If we're logged in, add curr user to Flask global."""
-    session.clear()
+    # session.clear()
 
     if CURR_USER_KEY in session:
         print("#####session", session[CURR_USER_KEY])
@@ -69,7 +69,6 @@ def add_csrf_to_g():
 
 def do_login(user):
     """ Log in user."""
-
     session[CURR_USER_KEY] = user.id
 
 def do_logout():
@@ -89,10 +88,12 @@ def register():
     the form.
     """
     do_logout()
+    print("register route:")
 
     form = RegisterForm()
 
     if form.validate_on_submit():
+        print("register: validating form")
         try:
             user = User.register(
                 username=form.username.data,
@@ -113,3 +114,10 @@ def register():
 
     else:
         return render_template('users/register.html', form=form)
+
+################################# Homepage
+@app.get("/")
+def homepage():
+    """Show homepage."""
+
+    return render_template("homepage.html")

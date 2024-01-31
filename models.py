@@ -12,10 +12,15 @@ class User(db.Model):
 
     __tablename__ = 'users'
 
+    id = db.Column(
+        db.Integer,
+        primary_key=True,
+    )
+# TODO: uncomment this later
     username = db.Column(
         db.String(30),
         nullable=False,
-        primary_key=True,
+        unique=True,
     )
 
     password = db.Column(
@@ -112,8 +117,8 @@ class Listing(db.Model):
     )
 
     host_username = db.Column(
-        db.String(30),
-        db.ForeignKey('users.username'),
+        db.Integer(),
+        db.ForeignKey('users.id'),
         nullable=False
     )
 
@@ -159,9 +164,9 @@ class Like(db.Model):
 
     __tablename__ = "likes"
 
-    username = db.Column(
-        db.String(30),
-        db.ForeignKey('users.username'),
+    user_id = db.Column(
+        db.Integer(),
+        db.ForeignKey('users.id'),
         primary_key=True,
     )
 
