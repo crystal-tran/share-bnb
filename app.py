@@ -184,12 +184,24 @@ def list_listings():
 
 ###################################### User
 
-@app.route("/users/<int:user_id>/")
-def add_listings():
-    """Show form to add a listing and handles form submission."""
+# @app.route("/users/<int:user_id>/")
+# def add_listings():
+#     """Show form to add a listing and handles form submission."""
+
+#     if not g.user:
+#         flash("Unauthorized", "danger")
+#         return redirect("/")
+
+#     form = request.forms
+# //TODO: loook at relationships
+@app.route("/users/<int: user_id>")
+def show_user(user_id):
+    """Show user profile with hosted listings."""
 
     if not g.user:
         flash("Unauthorized", "danger")
         return redirect("/")
 
-    form = request.forms
+    user = User.query.get_or_404(user_id)
+
+    return render_template('users/profile.html', user=user)

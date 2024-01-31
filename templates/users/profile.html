@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+<div>
+  <h2>{{ user.first_name }} {{ user.last_name }}</h2>
+  <p>{{ user.description }}</p>
+  <a class="mt-5 btn btn-primary" href="/users/{{ user.id }}/add-listing">Add a listing</a>
+</div>
+
+<div>
+  <ul>
+    {% for listing in user.listings %}
+      { if listing.host_username === user.id }
+      <li>
+        <p>{listing.title}</p>
+        <p>{listing.description}</p>
+
+      </li>
+    {% endfor %}
+  </ul>
+</div>
+

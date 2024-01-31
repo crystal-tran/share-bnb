@@ -138,12 +138,12 @@ class Listing(db.Model):
         nullable=False
     )
 
-    # renter_username = db.Column(
-    #     db.String(30),
-    #     db.ForeignKey('users.username'),
-    #     nullable=False,
-    #     default="",
-    # )
+    renter_username = db.Column(
+        db.Integer(),
+        db.ForeignKey('users.id'),
+        nullable=False,
+        default="",
+    )
 
     # relationship between User and Listing
     user = db.relationship('User', backref='listings')
