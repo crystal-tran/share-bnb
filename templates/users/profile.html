@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 
+{% block content%}
 <div>
   <h2>{{ user.first_name }} {{ user.last_name }}</h2>
   <p>{{ user.description }}</p>
@@ -7,15 +8,31 @@
 </div>
 
 <div>
+  <h2>Hosted Listings</h2>
   <ul>
-    {% for listing in user.listings %}
-      { if listing.host_username === user.id }
+    {% for listing in user.host_listings %}
       <li>
-        <p>{listing.title}</p>
-        <p>{listing.description}</p>
-
+        <a href="/listings/{{listing.id}}">{{listing.title}}</a>
+        <p>{{listing.description}}</p>
+        <p>{{listing.address}},{{listing.state}}, {{listing.zipcode}}</p>
+        <p>{{listing.price}}</p>
       </li>
     {% endfor %}
   </ul>
 </div>
 
+<div>
+  <h2>Currently renting</h2>
+  <ul>
+    {% for listing in user.renter_listings %}
+      <li>
+        <a href="/listings/{{listing.id}}">{{listing.title}}</a>
+        <p>{{listing.description}}</p>
+        <p>{{listing.address}},{{listing.state}}, {{listing.zipcode}}</p>
+        <p>{{listing.price}}</p>
+      </li>
+    {% endfor %}
+  </ul>
+</div>
+
+{% endblock content %}

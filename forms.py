@@ -87,18 +87,18 @@ class AddListingForm(FlaskForm):
         validators=[InputRequired()],
     )
 
-    photo = StringField(
-        'State',
-        validators=[InputRequired()],
-    )
-
-
-
-class TestingUploadForm(FlaskForm):
     photo = FileField(
         'Photo',
         validators=[InputRequired()]
     )
+
+
+
+# class TestingUploadForm(FlaskForm):
+#     photo = FileField(
+#         'Photo',
+#         validators=[InputRequired()]
+#     )
 
 class CSRFProtectForm(FlaskForm):
     """Form just for CSRF Protection."""

@@ -6,7 +6,7 @@ from flask import Flask, render_template, request, flash, g
 from flask import redirect, session, g, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
-from forms import TestingUploadForm, CSRFProtectForm, RegisterForm, LoginForm
+from forms import CSRFProtectForm, RegisterForm, LoginForm, AddListingForm
 from werkzeug.utils import secure_filename
 from models import db, connect_db, User, Like, Listing, Photo
 from s3_config import upload_file, create_presigned_url, allowed_file
@@ -193,8 +193,8 @@ def list_listings():
 #         return redirect("/")
 
 #     form = request.forms
-# //TODO: loook at relationships
-@app.route("/users/<int:user_id>")
+
+@app.get("/users/<int:user_id>")
 def show_user(user_id):
     """Show user profile with hosted listings."""
 
@@ -203,8 +203,39 @@ def show_user(user_id):
         return redirect("/")
 
     user = User.query.get_or_404(user_id)
-    listings = Listing.query.all()
 
-    return render_template('users/profile.html', user=user, listings=listings)
-# for listing in listings
-#if listing.renter_id == user.id
+    return render_template('users/profile.html', user=user)
+
+@app.route("/users/<int:user_id>/add-listing", methods=["GET", "POST"])
+def add_listing(user_id):
+    """Show form for adding a listing.
+
+    Add lisiting to database.
+
+    """
+    if not g.user:
+        flash("Unauthorized", "danger")
+        return redirect("/")
+
+    form = AddListingForm()
+
+    if form.validate_on_submit():
+        listing = Listing (
+            title = form.title.data,
+            description = form.description.data,
+            address = form.address.data,
+            city = form.city.data,
+            state = form.state.data,
+            zipcode = form.zipcode.data,
+            host_id= g.user.id
+        )
+        db.session.add(listing)
+        db.session.commit()
+
+        flash(f"{listing.title} added", "success")
+        return redirect(f"/users/{user_id}")
+
+    return render_template("listings/add-listing.html", form=form)
+
+
+
