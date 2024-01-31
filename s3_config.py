@@ -75,5 +75,5 @@ def create_presigned_url(object_name, bucket=SHAREBNB_BUCKET, expiration=3600):
 
 
 pre_signed_url = create_presigned_url('https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Casa_Assan_1.jpg/800px-Casa_Assan_1.jpg')
-
+print("pre_signed_url:", pre_signed_url)
 upload_file(create_presigned_url)
