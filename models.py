@@ -117,12 +117,12 @@ class Listing(db.Model):
         nullable=False
     )
 
-    renter_username = db.Column(
-        db.String(30),
-        db.ForeignKey('users.username'),
-        nullable=False,
-        default="",
-    )
+    # renter_username = db.Column(
+    #     db.String(30),
+    #     db.ForeignKey('users.username'),
+    #     nullable=False,
+    #     default="",
+    # )
 
     # relationship between User and Listing
     user = db.relationship('User', backref='listings')
@@ -156,6 +156,8 @@ class Photo(db.Model):
 
 class Like(db.Model):
     """A user can like a listing."""
+
+    __tablename__ = "likes"
 
     username = db.Column(
         db.String(30),

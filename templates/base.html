@@ -16,6 +16,11 @@
 
 <body>
 
+  <div class="mb-4">
+    {% for category, msg in get_flashed_messages(with_categories=True) %}
+    <div class="mb-3 alert alert-{{ category }}">{{ msg }}</div>
+    {% endfor %}
+  </div>
 </body>
 
 </html>

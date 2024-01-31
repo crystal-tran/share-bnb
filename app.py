@@ -24,9 +24,10 @@ app.config['SQLALCHEMY_ECHO'] = True
 
 toolbar = DebugToolbarExtension(app)
 
+CURR_USER_KEY = "curr_user"
+
 connect_db(app)
 
-CURR_USER_KEY = "curr_user"
 
 
 ####################### TESTING ###########################
@@ -50,9 +51,13 @@ CURR_USER_KEY = "curr_user"
 @app.before_request
 def add_user_to_g():
     """If we're logged in, add curr user to Flask global."""
+    session.clear()
 
     if CURR_USER_KEY in session:
+        print("#####session", session[CURR_USER_KEY])
         g.user = User.query.get(session[CURR_USER_KEY])
+        print("####g.user", g.user)
+
 
     else:
         g.user = None
@@ -107,4 +112,4 @@ def register():
         return redirect("/")
 
     else:
-        return render_template('users/signup.html', form=form)
+        return render_template('users/register.html', form=form)

@@ -1,6 +1,6 @@
-from models import User, Likes, db, Listing
+from models import User, Like, Listing
 
-from app import app
+from app import db
 
 db.drop_all()
 db.create_all()
