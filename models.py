@@ -132,13 +132,13 @@ class Listing(db.Model):
         nullable=False
     )
 
-    host_username = db.Column(
+    host_id = db.Column(
         db.Integer(),
         db.ForeignKey('users.id'),
         nullable=False
     )
 
-    renter_username = db.Column(
+    renter_id = db.Column(
         db.Integer(),
         db.ForeignKey('users.id'),
         nullable=False,
@@ -146,7 +146,8 @@ class Listing(db.Model):
     )
 
     # relationship between User and Listing
-    user = db.relationship('User', backref='listings')
+    host_user = db.relationship('User', foreign_keys=[host_id], backref="host_listings")
+    renter_user = db.relationship('User', foreign_keys=[renter_id], backref="renter_listings")
 
 
 class Photo(db.Model):

@@ -194,7 +194,7 @@ def list_listings():
 
 #     form = request.forms
 # //TODO: loook at relationships
-@app.route("/users/<int: user_id>")
+@app.route("/users/<int:user_id>")
 def show_user(user_id):
     """Show user profile with hosted listings."""
 
@@ -203,5 +203,8 @@ def show_user(user_id):
         return redirect("/")
 
     user = User.query.get_or_404(user_id)
+    listings = Listing.query.all()
 
-    return render_template('users/profile.html', user=user)
+    return render_template('users/profile.html', user=user, listings=listings)
+# for listing in listings
+#if listing.renter_id == user.id
