@@ -190,6 +190,14 @@ def list_listings():
 
     return render_template("listings/listings.html", listings=listings)
 
+@app.get("/listings/<int:listing_id>")
+def listing_detail(listing_id):
+    """Show an individual listing"""
+
+    listing = Listing.query.get_or_404(listing_id)
+
+    return render_template("listings/detail.html", listing=listing)
+
 ###################################### User
 
 # @app.route("/users/<int:user_id>/")
