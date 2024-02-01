@@ -172,13 +172,21 @@ def homepage():
 def list_listings():
     """Show page with listings."""
 
-    search = request.args.get('search-keyword')
+    search_title = request.args.get('search-title')
+    search_city = request.args.get('search-city')
+    print("search title:", search_title)
+    print("search_city:", search_city)
 
-    if not search:
+    if not search_title and not search_city:
         listings = Listing.query.all()
+        print("query listing:", listings)
+
     else:
         listings = Listing.query.filter(
-            Listing.title.like(f"%{search}%")).all()
+            Listing.title.ilike(f"%{search_title}%"),
+            Listing.city.ilike(f"%{search_city}%"),
+            ).all()
+        print("query filter listing:", listings)
 
     return render_template("listings/listings.html", listings=listings)
 

@@ -4,15 +4,23 @@
 
 <div>
   <form>
-    <label for="Search" class="form-label">Search</label>
+    <label for="sharebnb-search-title" class="form-label">Search destination...</label>
     <input
       type="text"
-      name="search-keyword"
-      id="sharebnb-search-keyword"
+      name="search-title"
+      id="sharebnb-search-title"
       class="form-control"
       aria-describedby="sharebnb-search-keyword"
-      placeholder="Search destinations...">
-    <div id="passwordHelpBlock" class="form-text">
+      placeholder="Destination name...">
+    <label for="sharebnb-search-city" class="form-label">City</label>
+    <input
+      type="text"
+      name="search-city"
+      id="sharebnb-search-city"
+      class="form-control"
+      aria-describedby="sharebnb-search-city"
+      placeholder="City">
+      <button class="btn btn-primary">Search</button>
   </form>
 </div>
 

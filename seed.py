@@ -35,9 +35,9 @@ db.session.commit()
 
 
 l1 = Listing(
-    title="test",
-    description="Testy",
-    address="123 Test",
+    title="Suburban backyard",
+    description="Great for family gatherings.",
+    address="123 Goldspot Dr",
     city="Dallas",
     state="TX",
     zipcode="22222",
@@ -47,9 +47,9 @@ l1 = Listing(
 )
 
 l2 = Listing(
-    title="test2",
-    description="Testy2",
-    address="457 Test",
+    title="Relaxing Retreat at the Pool",
+    description="Free Wifi",
+    address="457 Ferris Wheel Ct",
     city="San Francisco",
     state="CA",
     zipcode="11111",
@@ -68,5 +68,13 @@ p1 = Photo(
     photo_url="https://platthillnursery.com/wp-content/uploads/2022/03/brand-new-gardens-in-backyard.png"
 )
 
-db.session.add_all([p1])
+p2 = Photo(
+    listing_id=2,
+    photo_url="https://png.pngtree.com/background/20230611/original/pngtree-backyard-with-an-inground-pool-and-landscaping-picture-image_3156998.jpg"
+)
+
+
+
+
+db.session.add_all([p1, p2])
 db.session.commit()
