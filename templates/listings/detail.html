@@ -15,9 +15,24 @@
       </div>
 
       <div>
-        <form>
-          <button>Reserve</button>
+        {% if g.user %}
+        <form class="ml-3 d-inline">
+          <button id="book" style="display: none"
+            class="btn-sm btn btn-outline-primary" formaction="/book">
+            Book
+          </button>
+          <button id="cancel" style="display: none"
+            class="btn-sm btn btn-outline-secondary" formaction="/cancel">
+            Cancel
+          </button>
         </form>
+        {% endif %}
+
+        <script>
+          const listingId = {{ listing.id }}
+        </script>
+
+        <script src="/static/js/booking.js"></script>
       </div>
     </div>
 
