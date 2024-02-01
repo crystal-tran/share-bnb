@@ -149,6 +149,22 @@ class Listing(db.Model):
     host_user = db.relationship('User', foreign_keys=[host_id], backref="host_listings")
     renter_user = db.relationship('User', foreign_keys=[renter_id], backref="renter_listings")
 
+    @classmethod
+    def add_listing(cls, title, description, address, city, state, zipcode, host_id):
+        new_listing = Listing (
+            title = title,
+            description = description,
+            address = address,
+            city = city,
+            state = state,
+            zipcode = zipcode,
+            host_id= host_id
+        )
+
+        db.session.add(new_listing)
+
+        return new_listing
+
 
 class Photo(db.Model):
     """Photos for a listing"""

@@ -52,9 +52,9 @@ def add_user_to_g():
     # session.clear()
 
     if CURR_USER_KEY in session:
-        print("#####session", session[CURR_USER_KEY])
+        # print("#####session", session[CURR_USER_KEY])
         g.user = User.query.get(session[CURR_USER_KEY])
-        print("####g.user", g.user)
+        # print("####g.user", g.user)
 
     else:
         g.user = None
@@ -220,7 +220,7 @@ def add_listing(user_id):
     form = AddListingForm()
 
     if form.validate_on_submit():
-        listing = Listing (
+        new_listing = Listing.add_listing(
             title = form.title.data,
             description = form.description.data,
             address = form.address.data,
@@ -229,10 +229,32 @@ def add_listing(user_id):
             zipcode = form.zipcode.data,
             host_id= g.user.id
         )
-        db.session.add(listing)
+
+        photo = form.photo.data
+        print("***form photo:", photo)
+        if photo and allowed_file(photo.filename):
+            # sanitizes photo inputs
+            photo_name = secure_filename(photo.filename)
+            # gives a unique photo name
+            new_photo_name = uuid.uuid4().hex + '.' + photo_name.rsplit('.', 1)[1].lower()
+
+            #upload file to AWS S3 bucket
+            upload_file(photo, new_photo_name)
+            #create photo url to store in db
+            photo_url = create_presigned_url(new_photo_name)
+
+            listing_photo = Photo(
+                listing_id= new_listing.id,
+                photo_url = photo_url
+            )
+
+            db.session.add(listing_photo)
+            print("***photo_name:", new_photo_name)
+            print("photo_url:", photo_url)
+
         db.session.commit()
 
-        flash(f"{listing.title} added", "success")
+        flash(f"{new_listing.title} added", "success")
         return redirect(f"/users/{user_id}")
 
     return render_template("listings/add-listing.html", form=form)

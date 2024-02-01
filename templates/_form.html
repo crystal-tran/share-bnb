@@ -2,9 +2,9 @@
 
 {% for field in form if field.widget.input_type != 'hidden' %}
 
-  <div class='mb-3'>
+<div class='mb-3'>
 
-    {{ field.label }}
+  {{ field.label }}
 
     {% if field.type == "BooleanField" %}
 
@@ -14,20 +14,23 @@
 
       {{ field(class="form-select") }}
 
+    {% elif field.type == "FileField" %}
+      <input type=file name=file>
+
     {% else %}
 
       {{ field(class="form-control") }}
 
+  {% endif %}
+
+  <span>
+    {% if field.errors %}
+    {% for error in field.errors %}
+    <b class="text-danger">{{ error }}</b>
+    {% endfor %}
     {% endif %}
+  </span>
 
-    <span>
-      {% if field.errors %}
-        {% for error in field.errors %}
-          <b class="text-danger">{{ error }}</b>
-        {% endfor %}
-      {% endif %}
-    </span>
-
-  </div>
+</div>
 
 {% endfor %}

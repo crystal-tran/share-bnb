@@ -1,8 +1,9 @@
 """Forms for Flask Cafe."""
 
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, TextAreaField, DecimalField, FileField
+from wtforms import StringField, PasswordField, TextAreaField, DecimalField
 from wtforms.validators import InputRequired, Email, Length
+from flask_wtf.file import FileField, FileRequired
 
 class LoginForm(FlaskForm):
     """FOrm for logging in a user"""
@@ -89,7 +90,7 @@ class AddListingForm(FlaskForm):
 
     photo = FileField(
         'Photo',
-        validators=[InputRequired()]
+        validators=[FileRequired()]
     )
 
 
