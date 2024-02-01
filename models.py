@@ -138,19 +138,19 @@ class Listing(db.Model):
         nullable=False
     )
 
-    renter_id = db.Column(
-        db.Integer(),
-        db.ForeignKey('users.id'),
-        nullable=False,
-        default="",
-    )
+    # renter_id = db.Column(
+    #     db.Integer(),
+    #     db.ForeignKey('users.id'),
+    #     nullable=False,
+    #     default=0
+    # )
 
     # relationship between User and Listing
     host_user = db.relationship('User', foreign_keys=[host_id], backref="host_listings")
-    renter_user = db.relationship('User', foreign_keys=[renter_id], backref="renter_listings")
+    # renter_user = db.relationship('User', foreign_keys=[renter_id], backref="renter_listings")
 
     @classmethod
-    def add_listing(cls, title, description, address, city, state, zipcode, host_id):
+    def add_listing(cls, title, description, address, city, state, zipcode, price, host_id):
         new_listing = Listing (
             title = title,
             description = description,
@@ -158,6 +158,7 @@ class Listing(db.Model):
             city = city,
             state = state,
             zipcode = zipcode,
+            price=price,
             host_id= host_id
         )
 
@@ -165,6 +166,21 @@ class Listing(db.Model):
 
         return new_listing
 
+class Renter(db.Model):
+    """Renter listing and id"""
+    __tablename__ = 'renters'
+
+    listing_id = db.Column(
+        db.Integer,
+        db.ForeignKey('listings.id'),
+        primary_key=True
+    )
+
+    renter_id = db.Column(
+        db.Integer,
+        db.ForeignKey("users.id"),
+        primary_key=True
+    )
 
 class Photo(db.Model):
     """Photos for a listing"""

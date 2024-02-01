@@ -89,8 +89,8 @@ class AddListingForm(FlaskForm):
     )
 
     photo = FileField(
-        'Photo',
-        validators=[FileRequired()]
+        'Photo'
+        # validators=[FileRequired()]
     )
 
 

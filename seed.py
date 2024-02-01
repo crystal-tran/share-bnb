@@ -42,8 +42,8 @@ l1 = Listing(
     state="TX",
     zipcode="22222",
     price=100,
-    host_id=1,
-    renter_id=2
+    host_id=1
+
 )
 
 l2 = Listing(
@@ -54,8 +54,7 @@ l2 = Listing(
     state="CA",
     zipcode="11111",
     price=400,
-    host_id=2,
-    renter_id=1
+    host_id=2
 )
 
 db.session.add_all([l1, l2])

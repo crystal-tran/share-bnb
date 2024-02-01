@@ -227,10 +227,11 @@ def add_listing(user_id):
             city = form.city.data,
             state = form.state.data,
             zipcode = form.zipcode.data,
+            price=form.price.data,
             host_id= g.user.id
         )
 
-        photo = form.photo.data
+        photo = request.files["file"]
         print("***form photo:", photo)
         if photo and allowed_file(photo.filename):
             # sanitizes photo inputs
