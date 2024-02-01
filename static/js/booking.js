@@ -4,9 +4,11 @@ $(async function () {
   $("#book").on("click", book);
   $("#cancel").on("click", cancel);
 
-  let response = await fetch("/api/bookings", { params: { listing_id: listingId } });
-  let result = response.data;
-  console.log(response.data);
+  const urlParams = new URLSearchParams({ listingId })
+  console.log("urlParams:", urlParams)
+  const response = await fetch(`/api/bookings/${urlParams}`);
+  const result = response.data;
+  console.log("1st response:", response.data);
 
   if ("error" in result) {
     console.log(result.error);

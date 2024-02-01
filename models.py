@@ -141,6 +141,7 @@ class Listing(db.Model):
 
     # relationship between User and Listing
     host_user = db.relationship('User', foreign_keys=[host_id], backref="host_listings")
+    book_user = db.relationship('User', secondary='bookings', backref='booked_listings')
 
     @classmethod
     def add_listing(cls, title, description, address, city, state, zipcode, price, host_id):

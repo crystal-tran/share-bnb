@@ -8,7 +8,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
 from forms import CSRFProtectForm, RegisterForm, LoginForm, AddListingForm
 from werkzeug.utils import secure_filename
-from models import db, connect_db, User, Like, Listing, Photo
+from models import db, connect_db, User, Like, Listing, Photo, Booking
 from s3_config import upload_file, create_presigned_url, allowed_file
 import uuid
 
@@ -278,4 +278,56 @@ def add_listing(user_id):
     return render_template("listings/add-listing.html", form=form)
 
 
+
+#######################################
+# API for booking
+
+@app.get("/api/bookings/<int:listing_id>")
+def bookings_listing(listing_id):
+    """Did user book this listing?"""
+    print("get to api booking route")
+    if not g.user:
+        return jsonify({"error": "Not logged in"})
+
+    # listing_id = int(request.args['listing_id'])
+    listing = Listing.query.get_or_404(listing_id)
+
+    booking = Booking.query.filter_by(user_id=g.user.id, listing_id=listing.id).first()
+    booked = booking is not None
+
+    return jsonify({"booked": booked})
+
+
+@app.post("/api/book")
+def book_listing():
+    """Book a listing"""
+
+    if not g.user:
+        return jsonify({"error": "Not logged in"})
+
+    listing_id = int(request.args['listing_id'])
+    listing = Listing.query.get_or_404(listing_id)
+
+    g.user.booking.append(listing)
+    db.session.commit()
+
+    res = {"booked": listing.id}
+    return jsonify(res)
+
+
+@app.post("/api/cancel")
+def cancel_listing():
+    """Cancel a booked listing"""
+
+    if not g.user:
+        return jsonify({"error": "Not logged in"})
+
+    listing_id = int(request.args['listing_id'])
+    listing = Listing.query.get_or_404(listing_id)
+
+    Booking.query.filter_by(listing_id=listing_id, user_id=g.user.id).delete()
+    db.session.commit()
+
+    res = {"booked": listing.id}
+    return jsonify(res)
 
