@@ -1,20 +1,25 @@
 "use strict";
 
+/** Runs on listing/id page render.
+ *
+ * Calls api to check if listing is booked.
+ *
+ * If api return is true {booked: true}, hides 'book' and shows 'cancel' button
+ * If api returns false {booked: false}, hides 'cancel' and shows 'book' button
+ */
 $(async function () {
   $("#book").on("click", book);
   $("#cancel").on("click", cancel);
 
-  const urlParams = new URLSearchParams({ listingId })
-  console.log("urlParams:", urlParams)
-  const response = await fetch(`/api/bookings/${urlParams}`);
-  const result = response.data;
-  console.log("1st response:", response.data);
+  const urlParams = new URLSearchParams({ listing_id: listingId })
+  const response = await fetch(`/api/bookings?${urlParams}`);
+  const result = await response.json();
 
   if ("error" in result) {
     console.log(result.error);
   } else {
-    let bookings = result.bookings;
-    if (bookings) $("#cancel").show();
+    let booked = result.booked;
+    if (booked) $("#cancel").show();
     else $("#book").show();
   }
 });

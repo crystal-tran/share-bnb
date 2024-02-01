@@ -282,20 +282,25 @@ def add_listing(user_id):
 #######################################
 # API for booking
 
-@app.get("/api/bookings/<int:listing_id>")
-def bookings_listing(listing_id):
+@app.get("/api/bookings")
+def bookings_listing():
     """Did user book this listing?"""
     print("get to api booking route")
     if not g.user:
         return jsonify({"error": "Not logged in"})
 
-    # listing_id = int(request.args['listing_id'])
+    listing_id = int(request.args['listing_id'])
+    print("***listingid", listing_id)
     listing = Listing.query.get_or_404(listing_id)
+    print("***listing", listing)
 
-    booking = Booking.query.filter_by(user_id=g.user.id, listing_id=listing.id).first()
+
+    booking = Booking.query.filter_by(renter_id=g.user.id, listing_id=listing.id).first()
+    print("*****booking:", booking)
     booked = booking is not None
+    print("*****booked", booked)
 
-    return jsonify({"booked": booked})
+    return jsonify(booked = booked)
 
 
 @app.post("/api/book")
