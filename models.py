@@ -134,20 +134,13 @@ class Listing(db.Model):
 
     host_id = db.Column(
         db.Integer(),
-        db.ForeignKey('users.id'),
+        db.ForeignKey('users.id', ondelete="cascade"),
         nullable=False
     )
 
-    # renter_id = db.Column(
-    #     db.Integer(),
-    #     db.ForeignKey('users.id'),
-    #     nullable=False,
-    #     default=0
-    # )
 
     # relationship between User and Listing
     host_user = db.relationship('User', foreign_keys=[host_id], backref="host_listings")
-    # renter_user = db.relationship('User', foreign_keys=[renter_id], backref="renter_listings")
 
     @classmethod
     def add_listing(cls, title, description, address, city, state, zipcode, price, host_id):
@@ -166,21 +159,28 @@ class Listing(db.Model):
 
         return new_listing
 
-class Renter(db.Model):
+class Booking(db.Model):
     """Renter listing and id"""
-    __tablename__ = 'renters'
+    __tablename__ = 'bookings'
 
     listing_id = db.Column(
         db.Integer,
-        db.ForeignKey('listings.id'),
+        db.ForeignKey('listings.id', ondelete="cascade"),
         primary_key=True
     )
 
     renter_id = db.Column(
         db.Integer,
-        db.ForeignKey("users.id"),
+        db.ForeignKey("users.id", ondelete="cascade"),
         primary_key=True
     )
+
+    def __repr__(self):
+        return f"<Booking listing_id:{self.listing_id}, renter_id:{self.renter_id}>"
+
+    listing = db.relationship('Listing', cascade="all,delete", backref="booking")
+    user = db.relationship('User', cascade="all,delete", backref="booking")
+
 
 class Photo(db.Model):
     """Photos for a listing"""
@@ -194,7 +194,7 @@ class Photo(db.Model):
 
     listing_id = db.Column(
         db.Integer,
-        db.ForeignKey('listings.id'),
+        db.ForeignKey('listings.id', ondelete="cascade"),
         nullable=False
     )
 
@@ -215,13 +215,13 @@ class Like(db.Model):
 
     user_id = db.Column(
         db.Integer(),
-        db.ForeignKey('users.id'),
+        db.ForeignKey('users.id', ondelete="cascade"),
         primary_key=True,
     )
 
     listing_id = db.Column(
         db.Integer,
-        db.ForeignKey('listings.id'),
+        db.ForeignKey('listings.id', ondelete="cascade"),
         primary_key=True
     )
 
