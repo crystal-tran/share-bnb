@@ -230,6 +230,7 @@ def add_listing(user_id):
             price=form.price.data,
             host_id= g.user.id
         )
+        db.session.commit()
 
         photo = request.files["file"]
         print("***form photo:", photo)
