@@ -7,6 +7,7 @@
  * If api return is true {booked: true}, hides 'book' and shows 'cancel' button
  * If api returns false {booked: false}, hides 'cancel' and shows 'book' button
  */
+
 $(async function () {
   $("#book").on("click", book);
   $("#cancel").on("click", cancel);
@@ -24,16 +25,31 @@ $(async function () {
   }
 });
 
+
+/** On click on the 'book' button, it will make an API call to book the listing.
+ *
+ * API returns booked listing id like:
+ * {booked: 1}
+ *
+ * 'book' button will hide and 'cancel' button will show.
+ *
+ */
+
 async function book(evt) {
   evt.preventDefault();
 
-  let response = await fetch("/api/book",
+  const response = await fetch("/api/book",
     {
       method:"POST",
-      body:JSON.stringify({ listing_id: listingId })
+      body:JSON.stringify({ listing_id: listingId }),
+      headers: {
+        "content-type": "application/json",
+      }
     });
 
-  let result = response.data;
+  const result = await response.json();
+  console.log("book result:", result)
+
 
   if ("error" in result) {
     console.log(result.error);
@@ -43,15 +59,30 @@ async function book(evt) {
   }
 }
 
+
+/** On click on the 'cancel' button, it will make an API call to cancel
+ *  a booked listing.
+ *
+ * API returns canceled listing id like:
+ * {canceled: 1}
+ *
+ * 'book' button will show and 'cancel' button will hide
+ *
+ */
+
 async function cancel(evt) {
   evt.preventDefault();
 
-  let response = await fetch("/api/cancel",
+  const response = await fetch("/api/cancel",
   {
     method:"POST",
-    body:JSON.stringify({ listing_id: listingId })
+    body:JSON.stringify({ listing_id: listingId }),
+    headers: {
+      "content-type": "application/json",
+    }
   });
-  let result = response.data;
+  const result = await response.json();
+  console.log("cancel result:", result)
 
   if ("error" in result) {
     console.log(result.error);

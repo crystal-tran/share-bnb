@@ -285,20 +285,15 @@ def add_listing(user_id):
 @app.get("/api/bookings")
 def bookings_listing():
     """Did user book this listing?"""
-    print("get to api booking route")
+
     if not g.user:
         return jsonify({"error": "Not logged in"})
 
     listing_id = int(request.args['listing_id'])
-    print("***listingid", listing_id)
     listing = Listing.query.get_or_404(listing_id)
-    print("***listing", listing)
-
 
     booking = Booking.query.filter_by(renter_id=g.user.id, listing_id=listing.id).first()
-    print("*****booking:", booking)
     booked = booking is not None
-    print("*****booked", booked)
 
     return jsonify(booked = booked)
 
@@ -307,13 +302,19 @@ def bookings_listing():
 def book_listing():
     """Book a listing"""
 
+    print("book listing route")
     if not g.user:
         return jsonify({"error": "Not logged in"})
 
-    listing_id = int(request.args['listing_id'])
-    listing = Listing.query.get_or_404(listing_id)
+    data = request.json
+    print("data is:", data)
 
-    g.user.booking.append(listing)
+    listing_id = int(data['listing_id'])
+    print('listing_id:', listing_id)
+    listing = Listing.query.get_or_404(listing_id)
+    print("book listing:", listing)
+
+    g.user.booked_listings.append(listing)
     db.session.commit()
 
     res = {"booked": listing.id}
@@ -324,15 +325,21 @@ def book_listing():
 def cancel_listing():
     """Cancel a booked listing"""
 
+    print("cancel listing route")
+
     if not g.user:
         return jsonify({"error": "Not logged in"})
 
-    listing_id = int(request.args['listing_id'])
+    data = request.json
+    listing_id = int(data['listing_id'])
+    print('cancel listing_id:', listing_id)
     listing = Listing.query.get_or_404(listing_id)
+    print("cancel listing:", listing)
 
-    Booking.query.filter_by(listing_id=listing_id, user_id=g.user.id).delete()
+
+    Booking.query.filter_by(listing_id=listing_id, renter_id=g.user.id).delete()
     db.session.commit()
 
-    res = {"booked": listing.id}
+    res = {"canceled": listing.id}
     return jsonify(res)
 
