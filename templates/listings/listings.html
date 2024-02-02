@@ -26,7 +26,6 @@
 
 
 <h1 class="mb-4">Backyards and Outdoor Spaces</h1>
-
 <div class="row">
 
   {% for listing in listings %}
@@ -47,7 +46,7 @@
         </h5>
         <h6 class="card-subtitle mb-2 text-muted">
           {{ listing.address }}
-          {{ listing.city }} {{ listing.state }}, {{ listing.zipcode }}
+          <br>{{ listing.city }} {{ listing.state }}, {{ listing.zipcode }}
         </h6>
         <p class="card-text">
           {{ listing.description }}

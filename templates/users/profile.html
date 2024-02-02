@@ -14,10 +14,11 @@
   <ul>
     {% for listing in user.host_listings %}
       <li>
-        <a href="/listings/{{listing.id}}">{{listing.title}}</a>
-        <p>{{listing.description}}</p>
-        <p>{{listing.address}},{{listing.state}}, {{listing.zipcode}}</p>
-        <p>{{listing.price}}</p>
+        <a href="/listings/{{listing.id}}">{{ listing.title }}</a>
+        <p>{{ listing.description }}</p>
+        {{ listing.address }} <br>
+        {{ listing.city }} {{listing.state}}, {{ listing.zipcode }}
+        <p>{{listing.price}} / per night</p>
       </li>
     {% endfor %}
   </ul>
@@ -25,7 +26,7 @@
   <p>No lisitngs hosted.</p>
   {% endif %}
 </div>
-
+<hr>
 <div>
   <h4>Currently renting</h4>
   {% if user.booked_listings %}
