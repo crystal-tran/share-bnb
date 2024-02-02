@@ -33,10 +33,12 @@
 
   <div class="col-6 col-md-4 col-lg-3">
     <div class="card mb-3">
-
+      {% for photo in listing.photos %}
+        {% if loop.first %}
       <img class="card-img-top image-fluid" style="height: 10em"
-        src="{{ listing.photos[0].photo_url }}" alt="{{ listing.title }}">
-
+        src="{{ photo.photo_url }}" alt="{{ listing.title }}">
+        {% endif %}
+      {% endfor %}
       <div class="card-body">
         <h5 class="card-title">
           <a href="/listings/{{ listing.id }}">
