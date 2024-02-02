@@ -249,33 +249,33 @@ def add_listing(user_id):
         db.session.commit()
 
         # photo = request.files["file"]
-        photos = request.files.to_dict("file")
-        # breakpoint()
-        print("photos from request.files.getlist", photos)
+
+        photos = form.photo.data
+        # print("photos from request.files.getlist", photos)
         for photo in photos:
-            print("photo in photos", photos[photo])
-        # print("***form photo:", photo)
-        if photo and allowed_file(photo.filename):
-            # sanitizes photo inputs
-            photo_name = secure_filename(photo.filename)
-            # gives a unique photo name
-            new_photo_name = uuid.uuid4().hex + '.' + photo_name.rsplit('.', 1)[1].lower()
+            # print("photo in photos", photo)
 
-            #upload file to AWS S3 bucket
-            upload_file(photo, new_photo_name)
-            #create photo url to store in db
-            photo_url = create_presigned_url(new_photo_name)
+            if photo and allowed_file(photo.filename):
+                # sanitizes photo inputs
+                photo_name = secure_filename(photo.filename)
+                # gives a unique photo name
+                new_photo_name = uuid.uuid4().hex + '.' + photo_name.rsplit('.', 1)[1].lower()
 
-            listing_photo = Photo(
-                listing_id= new_listing.id,
-                photo_url = photo_url
-            )
+                #upload file to AWS S3 bucket
+                upload_file(photo, new_photo_name)
+                #create photo url to store in db
+                photo_url = create_presigned_url(new_photo_name)
 
-            db.session.add(listing_photo)
-            print("***photo_name:", new_photo_name)
-            print("photo_url:", photo_url)
+                listing_photo = Photo(
+                    listing_id= new_listing.id,
+                    photo_url = photo_url
+                )
 
-        db.session.commit()
+                db.session.add(listing_photo)
+                print("***photo_name:", new_photo_name)
+                print("photo_url:", photo_url)
+
+            db.session.commit()
 
         flash(f"{new_listing.title} added", "success")
         return redirect(f"/users/{user_id}")
