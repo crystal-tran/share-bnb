@@ -26,12 +26,11 @@
   {% endif %}
 </div>
 
-TODO: fix relationship (new table added)
 <div>
   <h4>Currently renting</h4>
-  {% if user.renter_listings %}
+  {% if user.booked_listings %}
   <ul>
-    {% for listing in user.renter_listings %}
+    {% for listing in user.booked_listings %}
       <li>
         <a href="/listings/{{listing.id}}">{{listing.title}}</a>
         <p>{{listing.description}}</p>

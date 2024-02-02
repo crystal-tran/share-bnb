@@ -248,8 +248,13 @@ def add_listing(user_id):
         )
         db.session.commit()
 
-        photo = request.files["file"]
-        print("***form photo:", photo)
+        # photo = request.files["file"]
+        photos = request.files.to_dict("file")
+        # breakpoint()
+        print("photos from request.files.getlist", photos)
+        for photo in photos:
+            print("photo in photos", photos[photo])
+        # print("***form photo:", photo)
         if photo and allowed_file(photo.filename):
             # sanitizes photo inputs
             photo_name = secure_filename(photo.filename)
