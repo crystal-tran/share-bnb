@@ -4,23 +4,26 @@
 
 <div>
   <form>
-    <label for="sharebnb-search-title" class="form-label">Search destination...</label>
-    <input
-      type="text"
-      name="search-title"
-      id="sharebnb-search-title"
-      class="form-control"
-      aria-describedby="sharebnb-search-keyword"
-      placeholder="Destination name...">
-    <label for="sharebnb-search-city" class="form-label">City</label>
-    <input
-      type="text"
-      name="search-city"
-      id="sharebnb-search-city"
-      class="form-control"
-      aria-describedby="sharebnb-search-city"
-      placeholder="City">
-      <button class="btn btn-primary">Search</button>
+    <label for="sharebnb-search-title" class="form-label">
+      Search destination...
+    </label>
+    <input type="text"
+           name="search-title"
+           id="sharebnb-search-title"
+           class="form-control"
+           aria-describedby="sharebnb-search-keyword"
+           placeholder="Destination name...">
+
+    <label for="sharebnb-search-city" class="form-label">
+      City
+    </label>
+    <input type="text"
+           name="search-city"
+           id="sharebnb-search-city"
+           class="form-control"
+           aria-describedby="sharebnb-search-city"
+           placeholder="City">
+    <button class="btn btn-primary">Search</button>
   </form>
 </div>
 
@@ -33,10 +36,14 @@
   <div class="col-6 col-md-4 col-lg-3">
     <div class="card mb-3">
       {% for photo in listing.photos %}
-        {% if loop.first %}
-      <img class="card-img-top image-fluid" style="height: 10em"
-        src="{{ photo.photo_url }}" alt="{{ listing.title }}">
-        {% endif %}
+
+      {% if loop.first %}
+      <img class="card-img-top image-fluid"
+           style="height: 10em"
+           src="{{ photo.photo_url }}"
+           alt="{{ listing.title }}">
+      {% endif %}
+
       {% endfor %}
       <div class="card-body">
         <h5 class="card-title">
@@ -57,4 +64,4 @@
 
   {% endfor %}
 
-{% endblock%}
+  {% endblock%}

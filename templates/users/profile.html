@@ -13,34 +13,37 @@
   {% if user.host_listings %}
   <ul>
     {% for listing in user.host_listings %}
-      <li>
-        <a href="/listings/{{listing.id}}">{{ listing.title }}</a>
-        <p>{{ listing.description }}</p>
-        {{ listing.address }} <br>
-        {{ listing.city }} {{listing.state}}, {{ listing.zipcode }}
-        <p>{{listing.price}} / per night</p>
-        <form method="POST" action="/users/{{g.user.id}}/{{listing.id}}/delete">
-          <button class="btn btn-outline-danger">Delete Listing</button>
-        </form>
-      </li>
+    <li>
+      <a href="/listings/{{listing.id}}">{{ listing.title }}</a>
+      <p>{{ listing.description }}</p>
+      {{ listing.address }} <br>
+      {{ listing.city }} {{listing.state}}, {{ listing.zipcode }}
+      <p>{{listing.price}} / per night</p>
+      <form method="POST" action="/users/{{g.user.id}}/{{listing.id}}/delete">
+        {{ g.csrf_form.hidden_tag() }}
+        <button class="btn btn-outline-danger">Delete Listing</button>
+      </form>
+    </li>
     {% endfor %}
   </ul>
   {% else %}
   <p>No lisitngs hosted.</p>
   {% endif %}
 </div>
+
 <hr>
+
 <div>
   <h4>Currently renting</h4>
   {% if user.booked_listings %}
   <ul>
     {% for listing in user.booked_listings %}
-      <li>
-        <a href="/listings/{{listing.id}}">{{listing.title}}</a>
-        <p>{{listing.description}}</p>
-        <p>{{listing.address}},{{listing.state}}, {{listing.zipcode}}</p>
-        <p>{{listing.price}}</p>
-      </li>
+    <li>
+      <a href="/listings/{{listing.id}}">{{listing.title}}</a>
+      <p>{{listing.description}}</p>
+      <p>{{listing.address}},{{listing.state}}, {{listing.zipcode}}</p>
+      <p>{{listing.price}}</p>
+    </li>
     {% endfor %}
   </ul>
   {% else %}

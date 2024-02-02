@@ -8,8 +8,8 @@ from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
 from forms import CSRFProtectForm, RegisterForm, LoginForm, AddListingForm
 from werkzeug.utils import secure_filename
-from models import db, connect_db, User, Like, Listing, Photo, Booking
-from s3_config import upload_file, create_presigned_url, allowed_file
+from models import db, connect_db, User, Listing, Photo, Booking
+from s3_config import upload_file, create_presigned_url
 import uuid
 
 
@@ -45,16 +45,14 @@ connect_db(app)
 #             print("***url", url )
 #     return render_template("upload.html")
 
-# Authorization
+########################################### Authorization
 @app.before_request
 def add_user_to_g():
     """If we're logged in, add curr user to Flask global."""
     # session.clear()
 
     if CURR_USER_KEY in session:
-        # print("#####session", session[CURR_USER_KEY])
         g.user = User.query.get(session[CURR_USER_KEY])
-        # print("####g.user", g.user)
 
     else:
         g.user = None
@@ -89,12 +87,10 @@ def register():
     the form.
     """
     do_logout()
-    print("register route:")
 
     form = RegisterForm()
 
     if form.validate_on_submit():
-        print("register: validating form")
         try:
             user = User.register(
                 username=form.username.data,
@@ -143,21 +139,18 @@ def logout():
     """Hanlde logout of user. Redirect to hompage"""
 
     form = g.csrf_form
-    print("1) g user:", g.user)
 
     if not form.validate_on_submit() or not g.user:
         flash("Unauthorized", "danger")
-        print("2) g user:", g.user)
         return redirect("/")
 
     do_logout()
-    print("3) g user:", g.user)
 
     flash("You have successfully logged out", "success")
     return redirect("/")
 
 
-# Homepage
+############################################### Homepage
 
 @app.get("/")
 def homepage():
@@ -165,8 +158,7 @@ def homepage():
 
     return render_template("homepage.html")
 
-# Listings
-
+############################################## Listings
 
 @app.get("/listings")
 def list_listings():
@@ -186,12 +178,12 @@ def list_listings():
 
     return render_template("listings/listings.html", listings=listings)
 
+
 @app.get("/listings/<int:listing_id>")
 def listing_detail(listing_id):
     """Show an individual listing"""
 
     listing = Listing.query.get_or_404(listing_id)
-
     return render_template("listings/detail.html", listing=listing)
 
 ###################################### User
@@ -207,6 +199,7 @@ def show_user(user_id):
     user = User.query.get_or_404(user_id)
 
     return render_template('users/profile.html', user=user)
+
 
 @app.route("/users/<int:user_id>/add-listing", methods=["GET", "POST"])
 def add_listing(user_id):
@@ -234,45 +227,40 @@ def add_listing(user_id):
         )
         db.session.commit()
 
-        # photo = request.files["file"]
-
         photos = form.photo.data
-        # print("photos from request.files.getlist", photos)
+
         for photo in photos:
-            # print("photo in photos", photo)
+            # if photo and allowed_file(photo.filename):
+            # sanitizes photo inputs
+            photo_name = secure_filename(photo.filename)
+            # gives a unique photo name
+            new_photo_name = uuid.uuid4().hex + '.' + photo_name.rsplit('.', 1)[1].lower()
 
-            if photo and allowed_file(photo.filename):
-                # sanitizes photo inputs
-                photo_name = secure_filename(photo.filename)
-                # gives a unique photo name
-                new_photo_name = uuid.uuid4().hex + '.' + photo_name.rsplit('.', 1)[1].lower()
+            #upload file to AWS S3 bucket
+            upload_file(photo, new_photo_name)
+            #create photo url to store in db
+            photo_url = create_presigned_url(new_photo_name)
 
-                #upload file to AWS S3 bucket
-                upload_file(photo, new_photo_name)
-                #create photo url to store in db
-                photo_url = create_presigned_url(new_photo_name)
+            listing_photo = Photo(
+                listing_id= new_listing.id,
+                photo_url = photo_url
+            )
 
-                listing_photo = Photo(
-                    listing_id= new_listing.id,
-                    photo_url = photo_url
-                )
+            db.session.add(listing_photo)
 
-                db.session.add(listing_photo)
-                print("***photo_name:", new_photo_name)
-                print("photo_url:", photo_url)
-
-            db.session.commit()
+        db.session.commit()
 
         flash(f"{new_listing.title} added", "success")
         return redirect(f"/users/{user_id}")
 
     return render_template("listings/add-listing.html", form=form)
 
+
 @app.post("/users/<int:user_id>/<int:listing_id>/delete")
 def delete_listing(user_id, listing_id):
     """Handle deleting a listing"""
 
-    if not g.user and not g.csrf_form.validate_on_submit():
+    if not g.user or not g.csrf_form.validate_on_submit():
         flash("Unauthorized", "danger")
         return redirect("/")
 
@@ -316,17 +304,13 @@ def bookings_listing():
 def book_listing():
     """Book a listing"""
 
-    print("book listing route")
     if not g.user:
         return jsonify({"error": "Not logged in"})
 
     data = request.json
-    print("data is:", data)
 
     listing_id = int(data['listing_id'])
-    print('listing_id:', listing_id)
     listing = Listing.query.get_or_404(listing_id)
-    print("book listing:", listing)
 
     g.user.booked_listings.append(listing)
     db.session.commit()
@@ -339,17 +323,12 @@ def book_listing():
 def cancel_listing():
     """Cancel a booked listing"""
 
-    print("cancel listing route")
-
     if not g.user:
         return jsonify({"error": "Not logged in"})
 
     data = request.json
     listing_id = int(data['listing_id'])
-    print('cancel listing_id:', listing_id)
     listing = Listing.query.get_or_404(listing_id)
-    print("cancel listing:", listing)
-
 
     Booking.query.filter_by(listing_id=listing_id, renter_id=g.user.id).delete()
     db.session.commit()

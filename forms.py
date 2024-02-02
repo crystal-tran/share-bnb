@@ -3,7 +3,8 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, TextAreaField, DecimalField
 from wtforms.validators import InputRequired, Email, Length
-from flask_wtf.file import FileField, FileRequired, MultipleFileField
+from flask_wtf.file import FileRequired, MultipleFileField, FileAllowed
+
 
 class LoginForm(FlaskForm):
     """FOrm for logging in a user"""
@@ -17,6 +18,7 @@ class LoginForm(FlaskForm):
         'Password',
         validators=[Length(min=6)],
     )
+
 
 class RegisterForm(FlaskForm):
     """Form for adding users on signup."""
@@ -90,9 +92,9 @@ class AddListingForm(FlaskForm):
 
     photo = MultipleFileField(
         'Photo(s)',
-        validators=[FileRequired()]
+        validators=[FileRequired(),
+                    FileAllowed(['png', 'jpg', 'jpeg'])]
     )
-
 
 
 # class TestingUploadForm(FlaskForm):

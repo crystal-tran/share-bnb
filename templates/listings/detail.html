@@ -19,7 +19,7 @@
           <button id="book" style="display: none" class="btn-sm btn btn-outline-primary" formaction="/book">
             Book
           </button>
-          <button id="cancel" style="display: none" class="btn-sm btn btn-outline-secondary" formaction="/cancel">
+          <button id="cancel" style="display: none" class="btn-sm btn btn-outline-danger" formaction="/cancel">
             Cancel
           </button>
         </form>
@@ -34,16 +34,12 @@
     </div>
   </div>
 
-  <!-- <div class="col-9 ">
-      {% for photo in listing.photos %}
-      <img src="{{ photo.photo_url }}" alt="{{ listing.title }}" style="max-width:1000px" ; />
-      {% endfor %}
-    </div> -->
   <div class="container-fluid text-center bg-1">
     <div class="row justify-content-center">
       <div id="carouselExample" class="carousel">
         <div class="carousel-inner" role="listbox">
           {% for photo in listing.photos %}
+
           {% if loop.first %}
           <div class="carousel-item active">
             <img src="{{photo.photo_url}}" alt="{{listing.title}}" style="width:600px; height: 100%;">
@@ -68,3 +64,13 @@
   </div>
 
   {% endblock %}
+
+
+
+
+
+    <!-- <div class="col-9 ">
+      {% for photo in listing.photos %}
+      <img src="{{ photo.photo_url }}" alt="{{ listing.title }}" style="max-width:1000px" ; />
+      {% endfor %}
+    </div> -->
