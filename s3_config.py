@@ -43,7 +43,7 @@ def upload_file(file_obj, object_name, bucket=SHAREBNB_BUCKET, ):
 
 
 
-def create_presigned_url(object_name, expiration=None, bucket_name=SHAREBNB_BUCKET):
+def create_presigned_url(object_name, expiration=60000, bucket_name=SHAREBNB_BUCKET):
     """Generate a presigned URL to share an S3 object
 
     :param bucket_name: string

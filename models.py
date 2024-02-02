@@ -140,7 +140,8 @@ class Listing(db.Model):
 
 
     # relationship between User and Listing
-    host_user = db.relationship('User', foreign_keys=[host_id], backref="host_listings")
+    host_user = db.relationship('User', backref="host_listings")
+    # foreign_keys=[host_id],
     book_user = db.relationship('User', secondary='bookings', backref='booked_listings')
 
     @classmethod
@@ -179,8 +180,8 @@ class Booking(db.Model):
     def __repr__(self):
         return f"<Booking listing_id:{self.listing_id}, renter_id:{self.renter_id}>"
 
-    listing = db.relationship('Listing', cascade="all,delete", backref="booking")
-    user = db.relationship('User', cascade="all,delete", backref="booking")
+    # listing = db.relationship('Listing', cascade="all,delete", backref="booking")
+    # user = db.relationship('User', cascade="all,delete", backref="booking")
 
 
 class Photo(db.Model):

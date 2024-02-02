@@ -19,6 +19,9 @@
         {{ listing.address }} <br>
         {{ listing.city }} {{listing.state}}, {{ listing.zipcode }}
         <p>{{listing.price}} / per night</p>
+        <form method="POST" action="/users/{{g.user.id}}/{{listing.id}}/delete">
+          <button class="btn btn-outline-danger">Delete Listing</button>
+        </form>
       </li>
     {% endfor %}
   </ul>

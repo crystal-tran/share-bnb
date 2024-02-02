@@ -196,16 +196,6 @@ def listing_detail(listing_id):
 
 ###################################### User
 
-# @app.route("/users/<int:user_id>/")
-# def add_listings():
-#     """Show form to add a listing and handles form submission."""
-
-#     if not g.user:
-#         flash("Unauthorized", "danger")
-#         return redirect("/")
-
-#     form = request.forms
-
 @app.get("/users/<int:user_id>")
 def show_user(user_id):
     """Show user profile with hosted listings."""
@@ -278,6 +268,29 @@ def add_listing(user_id):
 
     return render_template("listings/add-listing.html", form=form)
 
+@app.post("/users/<int:user_id>/<int:listing_id>/delete")
+def delete_listing(user_id, listing_id):
+    """Handle deleting a listing"""
+
+    if not g.user and not g.csrf_form.validate_on_submit():
+        flash("Unauthorized", "danger")
+        return redirect("/")
+
+    listing = Listing.query.get_or_404(listing_id)
+    if listing.host_id != g.user.id:
+        flash("Unauthorized", "danger")
+        return redirect("/")
+
+    photos = Photo.query.filter_by(listing_id=listing.id)
+
+    for photo in photos:
+        db.session.delete(photo)
+        db.session.commit()
+
+    db.session.delete(listing)
+    db.session.commit()
+
+    return redirect(f"/users/{g.user.id}")
 
 
 #######################################

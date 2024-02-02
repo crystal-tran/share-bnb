@@ -14,8 +14,8 @@
 
       {{ field(class="form-select") }}
 
-    {% elif field.type == "FileField" %}
-      <input type=file mulitple name=file>
+    {% elif field.type == "MultipleFileField" %}
+      <input type=file multiple name=photo>
 
     {% else %}
 
