@@ -13,11 +13,11 @@
     Explore your next backyard destination.
     <br />
     <br />
-    <a href="https://warbler.crystaltran.dev/">View Demo</a>
+    <a href="#">View Demo</a>
     <br />
     <br />
      <p>username: <b>guest</b> | demo password: <b>password</b></p>
-    <img src="https://github.com/crystal-tran/warbler/blob/main/static/images/warbler-demo-update.gif" alt="warbler-demo">
+    <img src="https://github.com/crystal-tran/share-bnb/blob/main/static/images/sharebnb-demo-gif.gif" alt="sharebnb-demo">
 
    
   </p>
@@ -73,7 +73,7 @@ Frontend and backend hosted on <a href="https://render.com/">Render</a> and data
 <br />
 
 ## Database Design
-<img src="https://github.com/crystal-tran/warbler/blob/main/static/images/warbler-database-schema.PNG" alt="warbler-db-schema">
+<img src="https://github.com/crystal-tran/share-bnb/blob/main/static/images/sharebnb-database-schema.PNG" alt="sharebnb-db-schema">
 
 
 ## Built With
