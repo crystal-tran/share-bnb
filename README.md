@@ -13,7 +13,7 @@
     Explore your next backyard destination.
     <br />
     <br />
-    <a href="#">View Demo</a>
+    <a href="https://sharebnb.crystaltran.dev/">View Demo</a>
     <br />
     <br />
      <p>username: <b>guest</b> | demo password: <b>password</b></p>
@@ -57,7 +57,7 @@ ShareBnB is a full-stack application that enables users to login, manage their p
 This project offered the opportunity to build an entire full-stack application from scratch with the technologies of our choosing. We chose to build the backend with Flask for server-side routing and its integration with Jinja for accelerated development and library support with SQLAlchemy. 
 <br />
 <br />
-Frontend and backend hosted on <a href="https://render.com/">Render</a> and database hosted on <a href="https://www.elephantsql.com/">ElephantSQL</a>
+Frontend and backend hosted on <a href="https://render.com/">Render</a> and database hosted on <a href="https://www.elephantsql.com/">ElephantSQL</a>.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -95,18 +95,18 @@ Frontend and backend hosted on <a href="https://render.com/">Render</a> and data
 
 To get a local copy up and running follow these steps.
 
-1. Clone repository
+1. Clone repository.
    ```sh
    git clone https://github.com/crystal-tran/share-bnb.git
 
    ```
-2. Create a virtual environment and install dependencies
+2. Create a virtual environment and install dependencies.
    ```sh
    python3 -m venv venv
    source venv/bin/activate
    pip install -r requirements.txt
    ```
-3. Create and seed database
+3. Create and seed database.
    ```sh
    createdb sharebnb
    python seed.py
@@ -115,7 +115,7 @@ To get a local copy up and running follow these steps.
    ```sh
    flask run
    ```
-5. View on <a href="http://localhost:5000/">http://localhost:5000/</a>
+5. View on <a href="http://localhost:5000/">http://localhost:5000/</a>.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
