@@ -10,8 +10,7 @@ access_key_id = os.environ['ACCESS_KEY_ID']
 secret_access_key = os.environ['SECRET_ACCESS_KEY']
 region = os.environ['REGION']
 SHAREBNB_BUCKET = os.environ['BUCKET_NAME']
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
-
+# ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
 s3 = boto3.client(
     's3',
@@ -70,11 +69,13 @@ def create_presigned_url(object_name, expiration=60000, bucket_name=SHAREBNB_BUC
     # The response contains the presigned URL
     return response
 
-# pre_signed_url = create_presigned_url('https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Casa_Assan_1.jpg/800px-Casa_Assan_1.jpg')
-# print("pre_signed_url:", pre_signed_url)
-# upload_file(create_presigned_url)
 
+# def allowed_file(filename):
+#     """Accepts a filename.
+#     Returns true if filename is one of the allowed extensions.
 
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+#     False if it's not in the list.
+#     """
+
+#     return '.' in filename and \
+#            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS

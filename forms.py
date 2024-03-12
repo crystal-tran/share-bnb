@@ -59,35 +59,42 @@ class AddListingForm(FlaskForm):
     title = StringField(
         'Title',
         validators=[InputRequired(), Length(max=50)],
+        default="Outdoor Lakehouse",
     )
 
     description = TextAreaField(
         'Description',
+        default="Fire pits, boats, kayaks, paddleboards, fishing, and more!",
     )
 
     address = StringField(
         'Address',
         validators=[InputRequired()],
+        default="444 Lake Pike",
     )
 
     city = StringField(
         'City',
         validators=[InputRequired(), Length(max=50)],
+        default="Salt Lake City",
     )
 
     state = StringField(
         'State',
         validators=[InputRequired(), Length(max=2)],
+        default="UT",
     )
 
     zipcode = StringField(
         'Zipcode',
         validators=[InputRequired(), Length(max=10)],
+        default="41489",
     )
 
     price = DecimalField(
         'Rental Price',
         validators=[InputRequired()],
+        default=200,
     )
 
     photo = MultipleFileField(
