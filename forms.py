@@ -12,11 +12,13 @@ class LoginForm(FlaskForm):
     username = StringField(
         'Username',
         validators=[InputRequired(), Length(max=30)],
+        default='guest',
     )
 
     password = PasswordField(
         'Password',
         validators=[Length(min=6)],
+        default='password',
     )
 
 
