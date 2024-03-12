@@ -13,7 +13,7 @@
     Explore your next backyard destination.
     <br />
     <br />
-    <a href="#">View Demo</a>
+    <a href="https://sharebnb.crystaltran.dev/">View Demo</a>
     <br />
     <br />
      <p>username: <b>guest</b> | demo password: <b>password</b></p>
