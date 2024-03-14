@@ -17,6 +17,7 @@
     <br />
     <br />
      <p>username: <b>guest</b> | demo password: <b>password</b></p>
+     <i>Disclaimer: it might take 10-30 sec for the page to fully render</i>
     <img src="https://github.com/crystal-tran/share-bnb/blob/main/static/images/sharebnb-demo-gif.gif" alt="sharebnb-demo">
 
    
